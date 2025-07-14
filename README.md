@@ -18,7 +18,7 @@ A standalone, containerized microservice for handling **social login (OAuth2)** 
 
 ## 🧱 Project Structure
 
-\`\`\`
+```
 src/
 ├── application/
 ├── domain/
@@ -26,13 +26,13 @@ src/
 ├── config/
 ├── shared/
 └── main.ts
-\`\`\`
+```
 
 ---
 
 ## 📦 Setup
 
-\`\`\`bash
+```bash
 # Install dependencies
 npm install
 
@@ -41,32 +41,36 @@ npm run dev
 
 # Build for production
 npm run build
-\`\`\`
+
+```
 
 ---
 
 ## 🐳 Run with Docker
 
-\`\`\`bash
+```bash
 docker-compose up --build
-\`\`\`
+```
 
 ---
 
 ## 🔧 Environment Variables (.env)
 
-\`\`\`
+```
 PORT=3000
 MONGO_URI=mongodb://mongo:27017/authdb
 JWT_SECRET=your_jwt_secret
-GOOGLE_CLIENT_ID=...
-GOOGLE_CLIENT_SECRET=...
-FACEBOOK_APP_ID=...
-FACEBOOK_APP_SECRET=...
-APPLE_TEAM_ID=...
-APPLE_KEY_ID=...
-APPLE_PRIVATE_KEY=...
-\`\`\`
+
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+
+FACEBOOK_APP_ID=your_facebook_app_id
+FACEBOOK_APP_SECRET=your_facebook_app_secret
+
+APPLE_TEAM_ID=your_apple_team_id
+APPLE_KEY_ID=your_apple_key_id
+APPLE_PRIVATE_KEY=your_apple_private_key
+```
 
 ---
 
