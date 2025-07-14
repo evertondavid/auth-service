@@ -1,85 +1,66 @@
-# Auth Service
 
-A standalone, containerized microservice for handling **social login (OAuth2)** using providers such as **Google**, **Facebook**, and **Apple**. This service is designed to be reusable across multiple frontend or mobile applications.
 
 ---
 
-## 🌐 Features
+## 🛠️ Configuração do Google OAuth2
 
-- 🔐 Secure OAuth 2.0 login for Google, Facebook, and Apple
-- 🧱 Clean Architecture with SOLID principles
-- 🛡️ TypeScript with type safety
-- 🧩 MongoDB integration
-- 📦 Dockerized and ready for deployment
-- ⚡ Token generation with JWT
-- 💡 Caching and performance optimization (future)
+Para que o login com Google funcione, siga estes passos:
+
+1. Acesse: [https://console.cloud.google.com/apis/credentials](https://console.cloud.google.com/apis/credentials)
+2. Crie um projeto novo ou selecione um existente.
+3. Vá em "Credenciais" > "Criar credencial" > "ID do cliente OAuth 2.0"
+4. Tipo de aplicativo: **Aplicativo da Web**
+5. Adicione o seguinte URI de redirecionamento autorizado:
+   ```
+   http://localhost:3000/auth/google
+   ```
+6. Copie o **Client ID** e coloque em seu arquivo `.env`:
+   ```env
+   GOOGLE_CLIENT_ID=seu_client_id_aqui
+   ```
 
 ---
 
-## 🧱 Project Structure
+## 🧪 Testes com Google OAuth Playground
 
+1. Acesse: [https://developers.google.com/oauthplayground/](https://developers.google.com/oauthplayground/)
+2. Clique na engrenagem ⚙️ e marque a opção **"Use your own OAuth credentials"**
+3. Insira seu `Client ID` no campo correspondente
+4. Siga os passos para autenticar e gerar um `id_token`
+5. Envie o `id_token` para sua API no Postman:
+
+```json
+POST http://localhost:3000/auth/google
+Body (raw JSON):
+{
+  "idToken": "copie_o_token_aqui"
+}
 ```
-src/
-├── application/
-├── domain/
-├── infrastructure/
-├── config/
-├── shared/
-└── main.ts
-```
 
 ---
 
-## 📦 Setup
+## 🗄️ Configuração do MongoDB com Docker
+
+Você pode iniciar rapidamente um banco MongoDB local com Docker:
 
 ```bash
-# Install dependencies
-npm install
-
-# Run locally
-npm run dev
-
-# Build for production
-npm run build
-
+docker run -d \
+  --name auth-mongo \
+  -p 27017:27017 \
+  -e MONGO_INITDB_ROOT_USERNAME=admin \
+  -e MONGO_INITDB_ROOT_PASSWORD=admin \
+  mongo:6
 ```
 
----
+No seu `.env`, configure assim:
 
-## 🐳 Run with Docker
-
-```bash
-docker-compose up --build
+```env
+MONGODB_URI=mongodb://admin:admin@localhost:27017
 ```
 
----
+Certifique-se de que o Docker esteja instalado e rodando. Para instalar:
 
-## 🔧 Environment Variables (.env)
-
-```
-PORT=3000
-MONGO_URI=mongodb://mongo:27017/authdb
-JWT_SECRET=your_jwt_secret
-
-GOOGLE_CLIENT_ID=your_google_client_id
-GOOGLE_CLIENT_SECRET=your_google_client_secret
-
-FACEBOOK_APP_ID=your_facebook_app_id
-FACEBOOK_APP_SECRET=your_facebook_app_secret
-
-APPLE_TEAM_ID=your_apple_team_id
-APPLE_KEY_ID=your_apple_key_id
-APPLE_PRIVATE_KEY=your_apple_private_key
-```
+- macOS: [https://www.docker.com/products/docker-desktop/](https://www.docker.com/products/docker-desktop/)
+- Windows: [https://www.docker.com/products/docker-desktop/](https://www.docker.com/products/docker-desktop/)
 
 ---
-
-## 📜 License
-
-This project is licensed under the [MIT License](LICENSE).
-
----
-
-## 👨‍💻 Author
-
-Made with by [Everton David](https://github.com/evertondavid)

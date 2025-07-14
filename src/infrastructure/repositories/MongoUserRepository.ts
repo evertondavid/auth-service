@@ -30,14 +30,45 @@ const UserModel: Model<IUserDocument> = mongoose.model<IUserDocument>('User', Us
 
 // Implementation of the user repository interface
 export class MongoUserRepository implements IUserRepository {
-  async findByProviderId(providerId: string): Promise<User | null> {
-    const userDoc = await UserModel.findOne({ providerId }).exec();
+  async findByProviderId(providerId: string, provider: string): Promise<User | null> {
+    const userDoc = await UserModel.findOne({ providerId, provider }).exec();
     return userDoc ? this.toDomain(userDoc) : null;
   }
 
-  async create(user: User): Promise<User> {
-    const created = await UserModel.create(user);
+  async create(data: {
+    name: string;
+    email: string;
+    provider: string;
+    providerId: string;
+    avatarUrl?: string;
+  }): Promise<User> {
+    const created = await UserModel.create({
+      name: data.name,
+      email: data.email,
+      provider: data.provider,
+      providerId: data.providerId,
+      avatar: data.avatarUrl,
+    });
+
     return this.toDomain(created);
+  }
+
+  async update(user: User): Promise<User> {
+    const updated = await UserModel.findOneAndUpdate(
+      { providerId: user.providerId, provider: user.provider },
+      {
+        name: user.name,
+        email: user.email,
+        avatar: user.avatarUrl,
+      },
+      { new: true }
+    ).exec();
+
+    if (!updated) {
+      throw new Error('User not found for update');
+    }
+
+    return this.toDomain(updated);
   }
 
   private toDomain(doc: IUserDocument): User {
