@@ -1,66 +1,96 @@
+# Auth Service
 
+This is a Node.js authentication microservice built with TypeScript and Clean Architecture principles. It provides Google OAuth login, JWT generation, and MongoDB integration for user management.
 
----
+## Features
 
-## 🛠️ Configuração do Google OAuth2
+- Google OAuth2.0 login
+- JWT access token generation
+- MongoDB user persistence
+- Clean and modular folder structure
+- Ready for route protection and refresh token implementation
+- Written in TypeScript
 
-Para que o login com Google funcione, siga estes passos:
+## Technologies
 
-1. Acesse: [https://console.cloud.google.com/apis/credentials](https://console.cloud.google.com/apis/credentials)
-2. Crie um projeto novo ou selecione um existente.
-3. Vá em "Credenciais" > "Criar credencial" > "ID do cliente OAuth 2.0"
-4. Tipo de aplicativo: **Aplicativo da Web**
-5. Adicione o seguinte URI de redirecionamento autorizado:
-   ```
-   http://localhost:3000/auth/google
-   ```
-6. Copie o **Client ID** e coloque em seu arquivo `.env`:
-   ```env
-   GOOGLE_CLIENT_ID=seu_client_id_aqui
-   ```
+- Node.js
+- Express
+- TypeScript
+- MongoDB (with Mongoose)
+- JWT (jsonwebtoken)
+- Google OAuth2.0
+- ts-node-dev for local development
 
----
+## Folder Structure
 
-## 🧪 Testes com Google OAuth Playground
+```
+src/
+│
+├── application/
+│   ├── controllers/          # Controllers (entry points for routes)
+│   ├── services/             # Business logic services (GoogleAuthService, JwtTokenService)
+│   └── usecases/             # Use case implementations
+│
+├── domain/
+│   ├── entities/             # Core domain entities (e.g. User)
+│   └── interfaces/           # Abstractions and contracts (e.g. IUserRepository)
+│
+├── infrastructure/
+│   ├── controllers/          # (Optional) infrastructure-level controllers
+│   ├── database/             # MongoDB connection and schemas
+│   ├── repositories/         # MongoDB repository implementation
+│   └── routes/               # Express routes
+│
+└── main.ts                   # App entry point
+```
 
-1. Acesse: [https://developers.google.com/oauthplayground/](https://developers.google.com/oauthplayground/)
-2. Clique na engrenagem ⚙️ e marque a opção **"Use your own OAuth credentials"**
-3. Insira seu `Client ID` no campo correspondente
-4. Siga os passos para autenticar e gerar um `id_token`
-5. Envie o `id_token` para sua API no Postman:
+## Getting Started
+
+1. **Install dependencies:**
+
+```bash
+npm install
+```
+
+2. **Configure environment variables:**
+
+Create a `.env` file based on `.env.example`:
+
+```
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+JWT_SECRET=your_jwt_secret
+MONGO_URI=your_mongodb_uri
+```
+
+3. **Start the server:**
+
+```bash
+npm run dev
+```
+
+## API Endpoint
+
+### `POST /auth/google`
+
+Accepts a Google ID token and returns a JWT token.
+
+**Request body:**
 
 ```json
-POST http://localhost:3000/auth/google
-Body (raw JSON):
 {
-  "idToken": "copie_o_token_aqui"
+  "idToken": "your_google_id_token"
 }
 ```
 
----
+**Response:**
 
-## 🗄️ Configuração do MongoDB com Docker
-
-Você pode iniciar rapidamente um banco MongoDB local com Docker:
-
-```bash
-docker run -d \
-  --name auth-mongo \
-  -p 27017:27017 \
-  -e MONGO_INITDB_ROOT_USERNAME=admin \
-  -e MONGO_INITDB_ROOT_PASSWORD=admin \
-  mongo:6
+```json
+{
+  "token": "your_jwt_token"
+}
 ```
 
-No seu `.env`, configure assim:
+## Author
 
-```env
-MONGODB_URI=mongodb://admin:admin@localhost:27017
-```
-
-Certifique-se de que o Docker esteja instalado e rodando. Para instalar:
-
-- macOS: [https://www.docker.com/products/docker-desktop/](https://www.docker.com/products/docker-desktop/)
-- Windows: [https://www.docker.com/products/docker-desktop/](https://www.docker.com/products/docker-desktop/)
-
----
+Developed by Everton David.
